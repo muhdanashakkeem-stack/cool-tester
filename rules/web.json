@@ -1,0 +1,174 @@
+[
+  {
+    "id": "WEB001",
+    "kind": "web",
+    "mask": false,
+    "name": "eval() runs text as code",
+    "regex": "(?<![\\w.])eval\\s*\\(",
+    "severity": "high",
+    "why": "If user input reaches eval, an attacker can run any code on your server or in your user's browser.",
+    "fix": "Remove eval. Use JSON.parse for data or a safe lookup table for logic.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB002",
+    "kind": "web",
+    "mask": false,
+    "name": "new Function() runs text as code",
+    "regex": "new\\s+Function\\s*\\(",
+    "severity": "high",
+    "why": "Same risk as eval: input can become running code.",
+    "fix": "Replace with normal functions and explicit logic.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB003",
+    "kind": "web",
+    "mask": false,
+    "name": "dangerouslySetInnerHTML",
+    "regex": "dangerouslySetInnerHTML",
+    "severity": "medium",
+    "why": "Unsanitized HTML lets attackers inject scripts (XSS) and steal sessions.",
+    "fix": "Render text normally, or sanitize with DOMPurify before using it.",
+    "category": "backend",
+    "langs": [
+      "js"
+    ]
+  },
+  {
+    "id": "WEB004",
+    "kind": "web",
+    "mask": false,
+    "name": "innerHTML assignment",
+    "regex": "\\.(?:inner|outer)HTML\\s*=(?!=)",
+    "severity": "medium",
+    "why": "Writing user data into innerHTML allows script injection (XSS).",
+    "fix": "Use textContent, or sanitize the HTML first.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html"
+    ]
+  },
+  {
+    "id": "WEB005",
+    "kind": "web",
+    "mask": false,
+    "name": "CORS allows every website",
+    "regex": "(?:origin\\s*:\\s*[\"']\\*[\"']|Access-Control-Allow-Origin[\"']?\\s*[:,]\\s*[\"']\\*[\"']|\\bcors\\(\\s*\\))",
+    "flags": "i",
+    "severity": "medium",
+    "why": "Any website can call your API from a visitor's browser.",
+    "fix": "Set CORS origin to your own domain list, not * .",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB006",
+    "kind": "web",
+    "mask": false,
+    "name": "SQL built from strings (SQL injection)",
+    "regex": "(?:\\b(?:select|insert|update|delete)\\b[^\\n]*\\b(?:from|into|set|where)\\b[^\\n]*[\"'`]\\s*\\+|\\b(?:select|insert|update|delete)\\b[^\\n`]*\\b(?:from|into|set|where)\\b[^\\n`]*\\$\\{)",
+    "flags": "i",
+    "severity": "high",
+    "why": "An attacker can change your database query and read or delete all data.",
+    "fix": "Use parameterized queries (placeholders like ? or $1), never string concatenation.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB007",
+    "kind": "web",
+    "mask": false,
+    "name": "SSL certificate checks turned off",
+    "regex": "rejectUnauthorized\\s*:\\s*false|NODE_TLS_REJECT_UNAUTHORIZED[\"']?\\s*[=:]\\s*[\"']?0|verify\\s*=\\s*False",
+    "severity": "high",
+    "why": "Attackers on the network can read or change your secure traffic.",
+    "fix": "Remove the override and fix the certificate instead.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB008",
+    "kind": "web",
+    "mask": false,
+    "name": "Debug mode on",
+    "regex": "\\bdebug\\s*[:=]\\s*true\\b|\\bapp\\.debug\\s*=\\s*True|\\bDEBUG\\s*=\\s*True",
+    "flags": "i",
+    "severity": "medium",
+    "why": "Debug mode shows internal errors and sometimes gives attackers a console.",
+    "fix": "Turn debug off in production using an environment variable.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  },
+  {
+    "id": "WEB009",
+    "kind": "web",
+    "mask": false,
+    "name": "Shell command built from strings",
+    "regex": "\\b(?:exec|execSync)\\s*\\(\\s*(?:`[^`]*\\$\\{|[\"'][^\"']*[\"']\\s*\\+)",
+    "severity": "high",
+    "why": "An attacker can run any command on your server (command injection).",
+    "fix": "Use execFile with an argument array and validate inputs.",
+    "category": "backend",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ]
+  }
+]

@@ -1,0 +1,2 @@
+@import url("http://fonts.example.com/a.css");
+.a { background: url(javascript:alert(1)); }

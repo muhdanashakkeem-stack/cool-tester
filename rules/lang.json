@@ -1,0 +1,1172 @@
+[
+  {
+    "id": "FE001",
+    "kind": "web",
+    "mask": false,
+    "name": "Login token saved in localStorage",
+    "langs": [
+      "js",
+      "html"
+    ],
+    "category": "frontend",
+    "regex": "(?:localStorage|sessionStorage)\\.setItem\\(\\s*[\"'][^\"']*(?:token|jwt|auth|secret|password)[^\"']*[\"']",
+    "severity": "medium",
+    "why": "Any script on the page (or an injected one) can read localStorage and steal the user's login.",
+    "fix": "Store session tokens in HttpOnly cookies set by the server.",
+    "flags": "i"
+  },
+  {
+    "id": "FE002",
+    "kind": "web",
+    "mask": false,
+    "name": "document.write used",
+    "langs": [
+      "js",
+      "html"
+    ],
+    "category": "frontend",
+    "regex": "document\\.write(?:ln)?\\s*\\(",
+    "severity": "medium",
+    "why": "Writing raw text into the page can run attacker scripts (XSS) and slows page loading.",
+    "fix": "Build elements with the DOM API or your framework."
+  },
+  {
+    "id": "FE003",
+    "kind": "web",
+    "mask": false,
+    "name": "postMessage sends to every website (*)",
+    "langs": [
+      "js",
+      "html"
+    ],
+    "category": "frontend",
+    "regex": "postMessage\\([^)]*,\\s*[\"']\\*[\"']\\s*\\)",
+    "severity": "medium",
+    "why": "Any site that opened your page can receive the message data.",
+    "fix": "Pass your exact origin instead of '*'."
+  },
+  {
+    "id": "FE004",
+    "kind": "web",
+    "mask": false,
+    "name": "Link opens new tab without rel=noopener",
+    "langs": [
+      "html",
+      "php",
+      "js"
+    ],
+    "category": "frontend",
+    "regex": "target=[\"']_blank[\"'](?![^>]*\\brel=)",
+    "severity": "low",
+    "why": "The opened page can take control of your page (tab-nabbing).",
+    "fix": "Add rel=\"noopener noreferrer\"."
+  },
+  {
+    "id": "FE005",
+    "kind": "web",
+    "mask": false,
+    "name": "Inline event handler in HTML",
+    "langs": [
+      "html",
+      "php"
+    ],
+    "category": "frontend",
+    "regex": "<[a-z][^>]*\\son(?:click|load|error|mouseover|submit)\\s*=",
+    "severity": "low",
+    "why": "Inline handlers block a strict Content-Security-Policy and ease XSS.",
+    "fix": "Attach events in JavaScript with addEventListener.",
+    "flags": "i"
+  },
+  {
+    "id": "FE006",
+    "kind": "web",
+    "mask": false,
+    "name": "External script loaded without integrity check",
+    "langs": [
+      "html",
+      "php"
+    ],
+    "category": "frontend",
+    "regex": "<script[^>]+src=[\"']https?://(?!localhost)[^\"']+[\"'](?![^>]*integrity=)",
+    "severity": "medium",
+    "why": "If that CDN is hacked, its code runs on your site with full access.",
+    "fix": "Add integrity=\"sha384-...\" and crossorigin, or host the file yourself.",
+    "flags": "i"
+  },
+  {
+    "id": "FE007",
+    "kind": "web",
+    "mask": false,
+    "name": "Insecure http:// resource (mixed content)",
+    "langs": [
+      "html",
+      "php"
+    ],
+    "category": "frontend",
+    "regex": "(?:src|href|action)=[\"']http://(?!localhost|127\\.0\\.0\\.1)",
+    "severity": "medium",
+    "why": "Attackers on the network can swap this file or read the data.",
+    "fix": "Use https:// for every resource.",
+    "flags": "i"
+  },
+  {
+    "id": "FE008",
+    "kind": "web",
+    "mask": false,
+    "name": "Password field shown as plain text",
+    "langs": [
+      "html",
+      "php"
+    ],
+    "category": "frontend",
+    "regex": "name=[\"']password[\"'][^>]*type=[\"']text[\"']",
+    "severity": "medium",
+    "why": "Passwords are visible on screen and saved by browsers as normal text.",
+    "fix": "Use type=\"password\".",
+    "flags": "i"
+  },
+  {
+    "id": "FE009",
+    "kind": "web",
+    "mask": false,
+    "name": "javascript: link",
+    "langs": [
+      "html",
+      "php",
+      "js"
+    ],
+    "category": "frontend",
+    "regex": "(?:href|src)=[\"']\\s*javascript:",
+    "severity": "medium",
+    "why": "javascript: URLs run code and are a common XSS path.",
+    "fix": "Use a normal link or a button with an event listener.",
+    "flags": "i"
+  },
+  {
+    "id": "FE010",
+    "kind": "web",
+    "mask": false,
+    "name": "Sensitive value printed to console",
+    "langs": [
+      "js"
+    ],
+    "category": "frontend",
+    "regex": "console\\.log\\([^)]*(?:password|token|secret|apikey|api_key)",
+    "severity": "low",
+    "why": "Console logs are visible to every user and end up in logging tools.",
+    "fix": "Remove the log or never print secrets.",
+    "flags": "i"
+  },
+  {
+    "id": "FE011",
+    "kind": "web",
+    "mask": false,
+    "name": "Predictable token made with Math.random",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "(?:token|secret|session|otp|password|reset)[^;\\n]{0,40}Math\\.random\\(\\)",
+    "severity": "medium",
+    "why": "Math.random is guessable, so attackers can predict tokens.",
+    "fix": "Use crypto.randomUUID() or crypto.randomBytes().",
+    "flags": "i"
+  },
+  {
+    "id": "CSS001",
+    "kind": "web",
+    "mask": false,
+    "name": "javascript: URL in CSS",
+    "langs": [
+      "css"
+    ],
+    "category": "frontend",
+    "regex": "url\\(\\s*[\"']?\\s*javascript:",
+    "severity": "medium",
+    "why": "Old browsers can run script from CSS URLs.",
+    "fix": "Remove it.",
+    "flags": "i"
+  },
+  {
+    "id": "CSS002",
+    "kind": "web",
+    "mask": false,
+    "name": "Stylesheet imported over http://",
+    "langs": [
+      "css"
+    ],
+    "category": "frontend",
+    "regex": "@import\\s+(?:url\\()?[\"']?http://",
+    "severity": "medium",
+    "why": "Attackers on the network can inject styles that hide or fake page content.",
+    "fix": "Use https:// or host the file locally.",
+    "flags": "i"
+  },
+  {
+    "id": "CSS003",
+    "kind": "web",
+    "mask": false,
+    "name": "@import in CSS slows rendering",
+    "langs": [
+      "css"
+    ],
+    "category": "speed",
+    "regex": "@import\\s+",
+    "severity": "low",
+    "why": "Each @import waits for the previous file, so the page shows later.",
+    "fix": "Use <link> tags or bundle the CSS.",
+    "flags": "i"
+  },
+  {
+    "id": "BE001",
+    "kind": "web",
+    "mask": false,
+    "name": "JWT decoded without verifying",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "jwt\\.decode\\(",
+    "severity": "medium",
+    "why": "decode does not check the signature, so anyone can forge a token.",
+    "fix": "Use jwt.verify with an explicit algorithms list."
+  },
+  {
+    "id": "BE002",
+    "kind": "web",
+    "mask": false,
+    "name": "JWT verify without allowed algorithms",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "jwt\\.verify\\((?![^)]*algorithms)",
+    "severity": "low",
+    "why": "Without an algorithms list, a forged token may be accepted.",
+    "fix": "Pass { algorithms: ['HS256'] } (or your algorithm)."
+  },
+  {
+    "id": "BE003",
+    "kind": "web",
+    "mask": false,
+    "name": "Error stack sent to the user",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "res\\.(?:send|json)\\([^)]*(?:err|error)\\.stack",
+    "severity": "medium",
+    "why": "Shows attackers your folder layout and libraries.",
+    "fix": "Send a generic message, log the stack on the server."
+  },
+  {
+    "id": "BE004",
+    "kind": "web",
+    "mask": false,
+    "name": "Open redirect",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "res\\.redirect\\(\\s*req\\.(?:query|body|params)",
+    "severity": "medium",
+    "why": "Attackers craft links on your domain that send users to fake login pages.",
+    "fix": "Redirect only to a fixed list of allowed paths."
+  },
+  {
+    "id": "BE005",
+    "kind": "web",
+    "mask": false,
+    "name": "User input used as a file path",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "(?:readFile|readFileSync|createReadStream|sendFile)\\([^)]*req\\.(?:query|body|params)",
+    "severity": "high",
+    "why": "Attackers can read any file on your server (../../.env).",
+    "fix": "Validate against an allow-list and use path.basename."
+  },
+  {
+    "id": "BE006",
+    "kind": "web",
+    "mask": false,
+    "name": "Server fetches a URL chosen by the user (SSRF)",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "(?:fetch|axios\\.get|axios|got|http\\.get)\\(\\s*req\\.(?:query|body|params)",
+    "severity": "high",
+    "why": "Attackers make your server call internal services or cloud metadata.",
+    "fix": "Allow only known hosts and block private IP ranges."
+  },
+  {
+    "id": "BE007",
+    "kind": "web",
+    "mask": false,
+    "name": "Database filter taken straight from the request (NoSQL injection)",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "\\.(?:find|findOne|updateOne|deleteOne|deleteMany)\\(\\s*req\\.(?:body|query)\\s*\\)",
+    "severity": "high",
+    "why": "Attackers send {\"$ne\": null} operators to bypass logins and read data.",
+    "fix": "Pick fields explicitly and cast them to strings."
+  },
+  {
+    "id": "BE008",
+    "kind": "web",
+    "mask": false,
+    "name": "Cookie flag turned off",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "(?:httpOnly|secure)\\s*:\\s*false",
+    "severity": "medium",
+    "why": "The cookie can be read by scripts or sent over plain http.",
+    "fix": "Set httpOnly: true and secure: true.",
+    "flags": "i"
+  },
+  {
+    "id": "BE009",
+    "kind": "web",
+    "mask": false,
+    "name": "Passwords compared in plain text",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "\\.password\\s*===?\\s*req\\.|req\\.body\\.password\\s*===?\\s*\\w+\\.password",
+    "severity": "high",
+    "why": "This means passwords are stored unhashed, so one leak exposes every account.",
+    "fix": "Hash with bcrypt or argon2 and compare with bcrypt.compare."
+  },
+  {
+    "id": "BE011",
+    "kind": "web",
+    "mask": false,
+    "name": "Weak session secret",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "secret\\s*:\\s*[\"'](?:keyboard cat|secret|changeme|password|123456|test)[\"']",
+    "severity": "high",
+    "why": "Attackers can forge session cookies.",
+    "fix": "Use a long random secret from .env.",
+    "flags": "i"
+  },
+  {
+    "id": "PY001",
+    "kind": "web",
+    "mask": false,
+    "name": "pickle loads untrusted data",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\bpickle\\.loads?\\(",
+    "severity": "high",
+    "why": "Loading pickle data from users runs attacker code.",
+    "fix": "Use JSON instead."
+  },
+  {
+    "id": "PY002",
+    "kind": "web",
+    "mask": false,
+    "name": "yaml.load without SafeLoader",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\byaml\\.load\\((?![^)]*Loader=(?:yaml\\.)?SafeLoader)",
+    "severity": "high",
+    "why": "Can run attacker code from a YAML file.",
+    "fix": "Use yaml.safe_load."
+  },
+  {
+    "id": "PY003",
+    "kind": "web",
+    "mask": false,
+    "name": "Shell command from os.system/popen",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\bos\\.(?:system|popen)\\(",
+    "severity": "high",
+    "why": "Attackers can run any command on your server.",
+    "fix": "Use subprocess.run([...]) with a list and validate input."
+  },
+  {
+    "id": "PY004",
+    "kind": "web",
+    "mask": false,
+    "name": "subprocess with shell=True",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "subprocess\\.[A-Za-z_]+\\([^)]*shell\\s*=\\s*True",
+    "severity": "high",
+    "why": "Shell mode turns input into commands (command injection).",
+    "fix": "Pass a list of arguments and drop shell=True."
+  },
+  {
+    "id": "PY005",
+    "kind": "web",
+    "mask": false,
+    "name": "SQL built with f-string / format / %",
+    "langs": [
+      "py"
+    ],
+    "category": "database",
+    "regex": "(?:\\bexecute(?:many)?\\(\\s*(?:f[\"']|[\"'][^\"']*[\"']\\s*(?:%|\\.format\\())|\\bf[\"'](?:select|insert|update|delete)\\b)",
+    "severity": "high",
+    "why": "Attackers change your query to read or delete all data (SQL injection).",
+    "fix": "Use placeholders: cur.execute('... WHERE id = %s', (uid,)).",
+    "flags": "i"
+  },
+  {
+    "id": "PY006",
+    "kind": "web",
+    "mask": false,
+    "name": "Flask/Django debug mode",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\.run\\([^)]*debug\\s*=\\s*True",
+    "severity": "medium",
+    "why": "Debug mode exposes an interactive console to attackers.",
+    "fix": "Turn debug off in production via environment variable."
+  },
+  {
+    "id": "PY007",
+    "kind": "web",
+    "mask": false,
+    "name": "Predictable token made with random module",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "(?:token|secret|otp|password|session)[^\\n]{0,60}\\brandom\\.",
+    "severity": "medium",
+    "why": "The random module is guessable.",
+    "fix": "Use the secrets module (secrets.token_urlsafe()).",
+    "flags": "i"
+  },
+  {
+    "id": "PY008",
+    "kind": "web",
+    "mask": false,
+    "name": "Django allows every host / disables CSRF",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "ALLOWED_HOSTS\\s*=\\s*\\[\\s*[\"']\\*[\"']|@csrf_exempt",
+    "severity": "medium",
+    "why": "Opens host-header and CSRF attacks.",
+    "fix": "List your real domains and keep CSRF protection on."
+  },
+  {
+    "id": "PY009",
+    "kind": "web",
+    "mask": false,
+    "name": "User input used as a file path",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "open\\([^)]*request\\.",
+    "severity": "high",
+    "why": "Attackers can read any file on the server.",
+    "fix": "Validate filenames with werkzeug.utils.secure_filename and an allow-list."
+  },
+  {
+    "id": "PY010",
+    "kind": "web",
+    "mask": false,
+    "name": "Template marks content as safe",
+    "langs": [
+      "py",
+      "html"
+    ],
+    "category": "frontend",
+    "regex": "\\|\\s*safe\\b|\\bMarkup\\(",
+    "severity": "medium",
+    "why": "Unescaped content allows XSS.",
+    "fix": "Remove |safe or sanitize first."
+  },
+  {
+    "id": "PHP001",
+    "kind": "web",
+    "mask": false,
+    "name": "include/require with user input",
+    "langs": [
+      "php"
+    ],
+    "category": "backend",
+    "regex": "\\b(?:include|require)(?:_once)?\\s*\\(?\\s*\\$_(?:GET|POST|REQUEST|COOKIE)",
+    "severity": "critical",
+    "why": "Attackers can run their own code on your server.",
+    "fix": "Map allowed page names to fixed files."
+  },
+  {
+    "id": "PHP002",
+    "kind": "web",
+    "mask": false,
+    "name": "unserialize on user data",
+    "langs": [
+      "php"
+    ],
+    "category": "backend",
+    "regex": "\\bunserialize\\s*\\(\\s*\\$",
+    "severity": "high",
+    "why": "Can run attacker code (object injection).",
+    "fix": "Use json_decode."
+  },
+  {
+    "id": "PHP003",
+    "kind": "web",
+    "mask": false,
+    "name": "SQL built from $_GET/$_POST",
+    "langs": [
+      "php"
+    ],
+    "category": "database",
+    "regex": "(?:mysqli?_query|->query|->exec)\\s*\\([^)]*\\$_(?:GET|POST|REQUEST)|[\"'](?:select|insert|update|delete)\\b[^\"']*\\$_(?:GET|POST|REQUEST)",
+    "severity": "high",
+    "why": "Attackers change your query to steal or delete data.",
+    "fix": "Use prepared statements (PDO or mysqli).",
+    "flags": "i"
+  },
+  {
+    "id": "PHP004",
+    "kind": "web",
+    "mask": false,
+    "name": "Shell command with variable",
+    "langs": [
+      "php"
+    ],
+    "category": "backend",
+    "regex": "\\b(?:shell_exec|system|passthru|popen|proc_open|exec)\\s*\\(\\s*[^)]*\\$",
+    "severity": "high",
+    "why": "Attackers can run any command on your server.",
+    "fix": "Avoid shell calls or use escapeshellarg with fixed commands."
+  },
+  {
+    "id": "PHP005",
+    "kind": "web",
+    "mask": false,
+    "name": "User input printed without escaping (XSS)",
+    "langs": [
+      "php"
+    ],
+    "category": "frontend",
+    "regex": "\\b(?:echo|print)\\b[^;\\n]*\\$_(?:GET|POST|REQUEST|COOKIE)",
+    "severity": "high",
+    "why": "Attackers run scripts in your visitors' browsers.",
+    "fix": "Wrap with htmlspecialchars($x, ENT_QUOTES)."
+  },
+  {
+    "id": "PHP006",
+    "kind": "web",
+    "mask": false,
+    "name": "display_errors turned on",
+    "langs": [
+      "php"
+    ],
+    "category": "backend",
+    "regex": "display_errors[\"']?\\s*[,=]\\s*[\"']?(?:1|on|true)",
+    "severity": "medium",
+    "why": "Error pages reveal file paths and database details.",
+    "fix": "Set display_errors=0 in production.",
+    "flags": "i"
+  },
+  {
+    "id": "PHP007",
+    "kind": "web",
+    "mask": false,
+    "name": "Removed mysql_* functions",
+    "langs": [
+      "php"
+    ],
+    "category": "database",
+    "regex": "\\bmysql_(?:query|connect|fetch)",
+    "severity": "medium",
+    "why": "Old unsafe API with no prepared statements.",
+    "fix": "Switch to PDO or mysqli prepared statements."
+  },
+  {
+    "id": "PHP008",
+    "kind": "web",
+    "mask": false,
+    "name": "File upload without checks",
+    "langs": [
+      "php"
+    ],
+    "category": "backend",
+    "regex": "move_uploaded_file\\(",
+    "severity": "medium",
+    "why": "Attackers can upload a .php file and run it.",
+    "fix": "Allow-list extensions and MIME types and store uploads outside the web root."
+  },
+  {
+    "id": "GO001",
+    "kind": "web",
+    "mask": false,
+    "name": "SQL built with fmt.Sprintf",
+    "langs": [
+      "go"
+    ],
+    "category": "database",
+    "regex": "(?:Query|Exec|QueryRow)\\w*\\(\\s*fmt\\.Sprintf\\(|fmt\\.Sprintf\\(\\s*[\"`](?:select|insert|update|delete)\\b",
+    "severity": "high",
+    "why": "SQL injection lets attackers read or delete data.",
+    "fix": "Use placeholders: db.Query(\"... WHERE id = $1\", id).",
+    "flags": "i"
+  },
+  {
+    "id": "GO002",
+    "kind": "web",
+    "mask": false,
+    "name": "TLS certificate checks disabled",
+    "langs": [
+      "go"
+    ],
+    "category": "backend",
+    "regex": "InsecureSkipVerify\\s*:\\s*true",
+    "severity": "high",
+    "why": "Anyone on the network can read or change the secure traffic.",
+    "fix": "Remove it and trust proper certificates."
+  },
+  {
+    "id": "GO003",
+    "kind": "web",
+    "mask": false,
+    "name": "Shell started with sh -c",
+    "langs": [
+      "go"
+    ],
+    "category": "backend",
+    "regex": "exec\\.Command\\(\\s*\"(?:sh|bash|cmd)\"\\s*,\\s*\"(?:-c|/c)\"",
+    "severity": "high",
+    "why": "Command injection if any input reaches the string.",
+    "fix": "Call the program directly with separate arguments."
+  },
+  {
+    "id": "GO004",
+    "kind": "web",
+    "mask": false,
+    "name": "Predictable token from math/rand",
+    "langs": [
+      "go"
+    ],
+    "category": "backend",
+    "regex": "(?:token|secret|session|otp|password)[^\\n]{0,60}\\brand\\.(?:Int|Intn|Read|Seed)",
+    "severity": "medium",
+    "why": "math/rand is guessable.",
+    "fix": "Use crypto/rand.",
+    "flags": "i"
+  },
+  {
+    "id": "GO005",
+    "kind": "web",
+    "mask": false,
+    "name": "HTTP server without timeouts",
+    "langs": [
+      "go"
+    ],
+    "category": "speed",
+    "regex": "http\\.ListenAndServe\\(",
+    "severity": "medium",
+    "why": "Slow clients can hold connections open and freeze your server (slowloris).",
+    "fix": "Use http.Server{ReadTimeout, WriteTimeout, IdleTimeout}."
+  },
+  {
+    "id": "GO006",
+    "kind": "web",
+    "mask": false,
+    "name": "http.Get without timeout",
+    "langs": [
+      "go"
+    ],
+    "category": "speed",
+    "regex": "\\bhttp\\.(?:Get|Post)\\(",
+    "severity": "low",
+    "why": "A slow remote server can hang your request forever.",
+    "fix": "Use an http.Client with Timeout."
+  },
+  {
+    "id": "GO007",
+    "kind": "web",
+    "mask": false,
+    "name": "template.HTML skips escaping",
+    "langs": [
+      "go"
+    ],
+    "category": "frontend",
+    "regex": "template\\.(?:HTML|JS)\\(",
+    "severity": "medium",
+    "why": "Unescaped content allows XSS.",
+    "fix": "Let html/template escape automatically."
+  },
+  {
+    "id": "GO008",
+    "kind": "web",
+    "mask": false,
+    "name": "User input used as a file path",
+    "langs": [
+      "go"
+    ],
+    "category": "backend",
+    "regex": "(?:os\\.Open|ioutil\\.ReadFile|os\\.ReadFile)\\([^)]*(?:r\\.URL|r\\.FormValue|Query\\(\\))",
+    "severity": "high",
+    "why": "Attackers can read any file on the server.",
+    "fix": "Clean the path and check it stays inside an allowed folder."
+  },
+  {
+    "id": "HASH01",
+    "kind": "web",
+    "mask": false,
+    "name": "Weak hash (MD5/SHA1)",
+    "langs": [
+      "py",
+      "php",
+      "go"
+    ],
+    "category": "backend",
+    "regex": "hashlib\\.(?:md5|sha1)\\(|\\b(?:md5|sha1)\\s*\\(\\s*\\$|\\b(?:md5|sha1)\\.(?:New|Sum)",
+    "severity": "medium",
+    "why": "MD5/SHA1 can be cracked in seconds, bad for passwords.",
+    "fix": "Use bcrypt, argon2 or scrypt for passwords."
+  },
+  {
+    "id": "SQL001",
+    "kind": "web",
+    "mask": false,
+    "name": "GRANT ALL privileges",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "grant\\s+all\\s+(?:privileges\\s+)?on\\s+\\*\\.\\*|grant\\s+all\\s+privileges",
+    "severity": "high",
+    "why": "The app user can drop or read every database.",
+    "fix": "Grant only the permissions the app needs.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL002",
+    "kind": "web",
+    "mask": false,
+    "name": "Password column stored as plain text type",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "\\bpassword\\s+(?:varchar|text|char)\\b",
+    "severity": "medium",
+    "why": "If it stores real passwords, one leak exposes all accounts.",
+    "fix": "Store a hash (password_hash) made with bcrypt or argon2.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL003",
+    "kind": "web",
+    "mask": false,
+    "name": "DROP TABLE/DATABASE in a script",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "\\bdrop\\s+(?:table|database)\\b",
+    "severity": "medium",
+    "why": "A mistaken run deletes data permanently.",
+    "fix": "Keep destructive statements out of app code and back up first.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL004",
+    "kind": "web",
+    "mask": false,
+    "name": "Database user created with hardcoded password",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "identified\\s+by\\s+['\"][^'\"]+['\"]",
+    "severity": "high",
+    "why": "The password is now in your repository.",
+    "fix": "Create users from a secret manager or env variable.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL005",
+    "kind": "web",
+    "mask": false,
+    "name": "Row Level Security disabled",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "alter\\s+table\\s+[^;]*disable\\s+row\\s+level\\s+security",
+    "severity": "critical",
+    "why": "Anyone with your public key can read every row (common Supabase leak).",
+    "fix": "Enable RLS and add per-user policies.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL006",
+    "kind": "web",
+    "mask": false,
+    "name": "Policy lets everyone in",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "create\\s+policy[^;]*using\\s*\\(\\s*true\\s*\\)",
+    "severity": "high",
+    "why": "using (true) allows every user to read every row.",
+    "fix": "Restrict with auth.uid() = user_id.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL007",
+    "kind": "web",
+    "mask": false,
+    "name": "UPDATE without WHERE",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "^\\s*update\\s+\\w+\\s+set\\s+(?:(?!\\bwhere\\b)[^;])*;",
+    "severity": "medium",
+    "why": "Changes every row in the table.",
+    "fix": "Add a WHERE clause.",
+    "flags": "i"
+  },
+  {
+    "id": "SQL008",
+    "kind": "web",
+    "mask": false,
+    "name": "DELETE without WHERE",
+    "langs": [
+      "sql"
+    ],
+    "category": "database",
+    "regex": "^\\s*delete\\s+from\\s+\\w+\\s*;",
+    "severity": "medium",
+    "why": "Deletes every row in the table.",
+    "fix": "Add a WHERE clause.",
+    "flags": "i"
+  },
+  {
+    "id": "SP001",
+    "kind": "web",
+    "mask": false,
+    "name": "Blocking file/command call",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "\\b(?:readFileSync|writeFileSync|readdirSync|execSync|statSync)\\s*\\(",
+    "severity": "low",
+    "why": "Sync calls freeze the whole server while they run.",
+    "fix": "Use the async versions (fs.promises) inside request handlers."
+  },
+  {
+    "id": "SP002",
+    "kind": "web",
+    "mask": false,
+    "name": "Database call inside a loop (N+1 queries)",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "\\bfor\\s*(?:await\\s*)?\\([^)]*\\)[^\\n]*\\bawait\\b[^\\n]*\\.(?:find\\w*|query|select|get|fetch|execute)\\(|\\.map\\(\\s*async[^\\n]*\\bawait\\b[^\\n]*\\.(?:find\\w*|query|select|get|fetch|execute)\\(",
+    "severity": "medium",
+    "why": "100 items means 100 database calls: pages get slow as data grows.",
+    "fix": "Fetch everything at once (WHERE id IN (...), include/join)."
+  },
+  {
+    "id": "SP003",
+    "kind": "web",
+    "mask": false,
+    "name": "SELECT * pulls every column",
+    "langs": [
+      "js",
+      "py",
+      "php",
+      "go",
+      "sql",
+      "java",
+      "rb"
+    ],
+    "category": "speed",
+    "regex": "select\\s+\\*\\s+from",
+    "severity": "low",
+    "why": "Sends unneeded data (and can leak private columns) and slows queries.",
+    "fix": "List only the columns you need.",
+    "flags": "i"
+  },
+  {
+    "id": "SP004",
+    "kind": "web",
+    "mask": false,
+    "name": "Query with no limit",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "\\.(?:findMany|findAll|find)\\(\\s*(?:\\{\\s*\\})?\\s*\\)",
+    "severity": "low",
+    "why": "Returns the whole table; slow and memory-heavy once data grows.",
+    "fix": "Add limit/pagination."
+  },
+  {
+    "id": "SP005",
+    "kind": "web",
+    "mask": false,
+    "name": "HTTP request without timeout (requests)",
+    "langs": [
+      "py"
+    ],
+    "category": "speed",
+    "regex": "requests\\.(?:get|post|put|delete|patch|head)\\((?![^)]*timeout)",
+    "severity": "medium",
+    "why": "A slow remote server hangs your app forever.",
+    "fix": "Pass timeout=10."
+  },
+  {
+    "id": "SP006",
+    "kind": "web",
+    "mask": false,
+    "name": "Deep copy with JSON.parse(JSON.stringify())",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "JSON\\.parse\\(\\s*JSON\\.stringify\\(",
+    "severity": "low",
+    "why": "Slow on large objects and drops dates/functions.",
+    "fix": "Use structuredClone()."
+  },
+  {
+    "id": "SP007",
+    "kind": "web",
+    "mask": false,
+    "name": "Whole library imported (big bundle)",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "import\\s+\\w+\\s+from\\s+[\"']lodash[\"']|require\\([\"']lodash[\"']\\)|(?:from|require\\()\\s*[\"']moment[\"']",
+    "severity": "low",
+    "why": "Adds hundreds of KB to the frontend and slows first load.",
+    "fix": "Import single functions (lodash/debounce) or use date-fns/dayjs."
+  },
+  {
+    "id": "SP008",
+    "kind": "web",
+    "mask": false,
+    "name": "Image without loading=lazy",
+    "langs": [
+      "html"
+    ],
+    "category": "speed",
+    "regex": "<img(?![^>]*\\bloading=)[^>]*>",
+    "severity": "low",
+    "why": "All images download at once, so the page is slower.",
+    "fix": "Add loading=\"lazy\" and width/height.",
+    "flags": "i"
+  },
+  {
+    "id": "SP009",
+    "kind": "web",
+    "mask": false,
+    "name": "Very fast setInterval",
+    "langs": [
+      "js"
+    ],
+    "category": "speed",
+    "regex": "setInterval\\([^,]+,\\s*(?:[0-9]{1,2}|1[0-9]{2})\\s*\\)",
+    "severity": "low",
+    "why": "Timers under 200ms burn CPU and battery.",
+    "fix": "Use a longer interval or requestAnimationFrame."
+  },
+  {
+    "id": "SP010",
+    "kind": "web",
+    "mask": false,
+    "name": "LIKE with leading wildcard",
+    "langs": [
+      "sql",
+      "py",
+      "php",
+      "js",
+      "go"
+    ],
+    "category": "speed",
+    "regex": "like\\s+['\"]%",
+    "severity": "low",
+    "why": "Cannot use an index, so the table is scanned every time.",
+    "fix": "Use full-text search or a trigram index.",
+    "flags": "i"
+  },
+  {
+    "id": "SP011",
+    "kind": "web",
+    "mask": false,
+    "name": "time.sleep in Python code",
+    "langs": [
+      "py"
+    ],
+    "category": "speed",
+    "regex": "\\btime\\.sleep\\(",
+    "severity": "low",
+    "why": "In a web request this blocks the worker.",
+    "fix": "Use background tasks or async sleep."
+  },
+  {
+    "id": "GEN001",
+    "kind": "web",
+    "mask": false,
+    "name": "Reminder to add security later",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb",
+      "sql",
+      "css"
+    ],
+    "category": "general",
+    "regex": "(?:TODO|FIXME)[^\\n]{0,40}(?:auth|security|validate|sanitize|password)",
+    "severity": "low",
+    "why": "Skipped security work is easy to forget before launch.",
+    "fix": "Do the task now.",
+    "flags": "i"
+  },
+  {
+    "id": "GEN002",
+    "kind": "web",
+    "mask": false,
+    "name": "Authentication bypass switch",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ],
+    "category": "general",
+    "regex": "(?:skip|bypass|disable)[_\\s-]?auth",
+    "severity": "medium",
+    "why": "A bypass flag left on in production gives everyone access.",
+    "fix": "Remove it, or make sure it is off outside local dev.",
+    "flags": "i"
+  },
+  {
+    "id": "GEN003",
+    "kind": "web",
+    "mask": false,
+    "name": "Default admin credentials",
+    "langs": [
+      "js",
+      "html",
+      "py",
+      "php",
+      "go",
+      "java",
+      "rb"
+    ],
+    "category": "general",
+    "regex": "(?:admin|root)[\"']?\\s*[:=,]\\s*[\"'](?:admin|password|123456|root|1234)[\"']",
+    "severity": "high",
+    "why": "Default logins are the first thing attackers try.",
+    "fix": "Create a strong unique password from an env variable.",
+    "flags": "i"
+  },
+  {
+    "id": "BE012",
+    "kind": "web",
+    "mask": false,
+    "name": "Whole request body saved to the database",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "\\.(?:create|insert|insertOne|insertMany|update|updateOne|findByIdAndUpdate|findOneAndUpdate|upsert|assign)\\w*\\(\\s*(?:[\\w.]+,\\s*)?(?:req\\.body|\\{\\s*\\.\\.\\.req\\.body)|\\bdata\\s*:\\s*(?:req\\.body|\\{\\s*\\.\\.\\.req\\.body)",
+    "severity": "high",
+    "why": "A user can add extra fields (role: admin, price: 0) because nothing says they can't.",
+    "fix": "Whitelist the exact fields each endpoint may set."
+  },
+  {
+    "id": "BE013",
+    "kind": "web",
+    "mask": false,
+    "name": "Record fetched by an ID from the request",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "\\.(?:findById|findByPk|findUnique|findOne|findByIdAndDelete|findByIdAndUpdate|destroy|deleteOne)\\w*\\([^)]*req\\.(?:params|query|body)\\.\\w*id\\b",
+    "severity": "medium",
+    "why": "If it does not also check who owns the record, changing the ID shows someone else's data (IDOR).",
+    "fix": "Also filter by the logged-in user's ID and return not-found if it is not theirs.",
+    "flags": "i"
+  },
+  {
+    "id": "PY011",
+    "kind": "web",
+    "mask": false,
+    "name": "Whole request body passed to a model",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\(\\s*\\*\\*\\s*request\\.(?:json|form|data|POST|get_json\\(\\))",
+    "severity": "high",
+    "why": "A user can set fields like role or price by adding them to the request.",
+    "fix": "Pass only an explicit list of allowed fields."
+  },
+  {
+    "id": "UP001",
+    "kind": "web",
+    "mask": false,
+    "name": "File upload with no size limit",
+    "langs": [
+      "js"
+    ],
+    "category": "backend",
+    "regex": "\\bmulter\\((?![^)]*limits)",
+    "severity": "medium",
+    "why": "One huge upload can freeze the app for everyone.",
+    "fix": "Set limits: { fileSize: ... } and check the real file type."
+  },
+  {
+    "id": "PY012",
+    "kind": "web",
+    "mask": false,
+    "name": "Upload saved under the user's file name",
+    "langs": [
+      "py"
+    ],
+    "category": "backend",
+    "regex": "\\.save\\([^)]*\\.filename",
+    "severity": "high",
+    "why": "Attackers choose the name and path of the file on your server.",
+    "fix": "Save under a random name outside the app folder, after checking the real type."
+  }
+]

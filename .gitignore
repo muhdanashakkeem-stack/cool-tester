@@ -1,0 +1,5 @@
+node_modules/
+.cool-tester/
+npm-debug.log*
+.DS_Store
+Thumbs.db
