@@ -4,6 +4,14 @@
   "description": "Offline security tester for vibe coders. Reads your code, attacks your local app, and tells your AI agent how to fix it. No API key.",
   "type": "module",
   "bin": { "cool-tester": "bin/cool-tester.js" },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/muhdanashakkeem-stack/cool-tester.git"
+  },
+  "bugs": {
+    "url": "https://github.com/muhdanashakkeem-stack/cool-tester/issues"
+  },
+  "homepage": "https://github.com/muhdanashakkeem-stack/cool-tester#readme",
   "files": ["bin", "src", "rules", "README.md"],
   "scripts": {
     "test": "node --test test/scan.test.js test/attack.test.js test/mcp.test.js test/locks.test.js",

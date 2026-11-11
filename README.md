@@ -42,23 +42,48 @@ npm run audit
 
 ---
 
-## 🤖 Connect to AI Coding Agents via MCP
+## 🤖 Connect to AI Coding Agents via MCP (Worldwide Setup)
 
-Cool-Tester connects directly to **Claude Code**, **Cursor**, **Antigravity**, and **Gemini** with zero API keys required.
+Anyone in the world can connect **Cool-Tester** directly into their favorite AI agent (**Claude Code**, **Cursor**, **Antigravity**, **VS Code**, **Windsurf**, or **Claude Desktop**) without installing anything manually!
 
-### 1. Claude Code
+### 🌍 Universal Setup (Zero-Install via GitHub / NPX)
+
+#### 1. Claude Code
+Run in your terminal:
 ```bash
-claude mcp add cool-tester node "./bin/cool-tester.js" mcp
+claude mcp add cool-tester npx -y github:muhdanashakkeem-stack/cool-tester mcp
 ```
 
-### 2. Cursor
-Add in **Cursor Settings** ➔ **Features** ➔ **MCP** ➔ **Add Server**:
+#### 2. Cursor / Windsurf
+Go to **Settings** ➔ **Features** ➔ **MCP** ➔ **Add Server**:
 - **Name:** `cool-tester`
-- **Type:** `stdio`
-- **Command:** `node "./bin/cool-tester.js" mcp`
+- **Type:** `command` (or `stdio`)
+- **Command:** `npx -y github:muhdanashakkeem-stack/cool-tester mcp`
 
-### 3. Antigravity / Gemini CLI (`mcp_config.json`)
+#### 3. Antigravity / VS Code / Claude Desktop / Gemini CLI
+Add this to your MCP configuration file (`mcp_config.json` or `claude_desktop_config.json`):
 ```json
+{
+  "mcpServers": {
+    "cool-tester": {
+      "command": "npx",
+      "args": ["-y", "github:muhdanashakkeem-stack/cool-tester", "mcp"]
+    }
+  }
+}
+```
+
+---
+
+### 💻 Local Setup (If you cloned the repository)
+
+If you are developing locally inside the cloned repository:
+
+```bash
+# Claude Code:
+claude mcp add cool-tester node ./bin/cool-tester.js mcp
+
+# Or in your mcp_config.json:
 {
   "mcpServers": {
     "cool-tester": {
@@ -69,8 +94,21 @@ Add in **Cursor Settings** ➔ **Features** ➔ **MCP** ➔ **Add Server**:
 }
 ```
 
-### Tools Given to Your AI Agent:
-- `audit_project`: Complete autonomous pipeline in one call.
+---
+
+### 💬 How to Talk to Your AI Agent
+
+Once connected, you don't even need the CLI! Just say to your AI:
+> *"Audit my project with cool-tester, attack my local dev server on port 5000, and fix any security vulnerabilities."*
+
+Your AI will autonomously:
+1. Call `audit_project` (or `check_code` + `start_attack`).
+2. Discover open doors, secret leaks, missing auth, and rate limits.
+3. Automatically patch the code and write secure configurations.
+4. Call `verify_fix` to confirm 100% of the 12 Locks are secured!
+
+### Tools Exposed to Your AI Agent:
+- `audit_project`: Complete autonomous pipeline in one call (scan + attack + 12 locks + dashboard).
 - `check_code`: Static security and secret leak scanner.
 - `start_attack`: Dynamic localhost ethical probes and latency benchmarks.
 - `lock_report`: 12 Locks status evaluator.
