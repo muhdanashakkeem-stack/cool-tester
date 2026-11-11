@@ -14,7 +14,8 @@ const gate = (r, o) => { if (o.failOn && meetsThreshold(r.summary, o.failOn)) pr
 const fail = (e) => { console.error(chalk.red("✖ " + e.message)); process.exit(2); };
 
 program.command("audit [path]").description("ONE COMMAND complete autonomous audit: static check, local attack, speed, 12 locks & HTML dashboard")
-  .option("--url <url>", "local app URL (e.g. http://localhost:3000; auto-detected if omitted)")
+  .option("--url <url>", "local app URL (e.g. http://localhost:3000, http://localhost:5000; auto-detected if omitted)")
+  .option("--port <port>", "local app port number (e.g. 5000, 3000)")
   .option("--token <t>", "optional demo user token")
   .option("--samples <n>", "requests per route for speed test", "5")
   .option("--json", "output report as JSON")
@@ -28,10 +29,10 @@ program.command("audit [path]").description("ONE COMMAND complete autonomous aud
 program.command("check [path]").description("Read the code: secrets, git/.env, weak web code, speed").option("--json").option("--fix-prompt").option("--fail-on <level>")
   .action((p, o) => { try { const r = check(p); out(report(p), o); gate(r, o); } catch (e) { fail(e); } });
 
-program.command("attack <url>").description("Attack your app running on localhost (refuses anything else)")
-  .option("--path <dir>", "project folder (reads routes from code)").option("--token <t>", "demo user token").option("--samples <n>", "requests per route for speed test", "20")
+program.command("attack <target>").description("Attack your app running on localhost (e.g. 5000, localhost:5000, or http://localhost:5000)")
+  .option("--path <dir>", "project folder (reads routes from code)").option("--port <port>", "port number").option("--token <t>", "demo user token").option("--samples <n>", "requests per route for speed test", "20")
   .option("--json").option("--fix-prompt").option("--fail-on <level>")
-  .action(async (url, o) => { try { const r = await runAttack(url, { path: o.path, token: o.token, samples: Number(o.samples) }); out(report(o.path), o); gate(r, o); } catch (e) { fail(e); } });
+  .action(async (target, o) => { try { const url = o.port ? `http://localhost:${o.port}` : target; const r = await runAttack(url, { path: o.path, token: o.token, samples: Number(o.samples) }); out(report(o.path), o); gate(r, o); } catch (e) { fail(e); } });
 
 program.command("report [path]").description("Show the latest combined report").option("--json").option("--fix-prompt")
   .action((p, o) => out(report(p), o));

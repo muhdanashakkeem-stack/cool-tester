@@ -10,8 +10,8 @@ const path = z.string().optional().describe("Project folder (default: current fo
 export async function startMcp() {
   const server = new McpServer({ name: "cool-tester", version: "0.2.0" });
   server.tool("audit_project", "Execute complete autonomous pipeline: static scan, ethical attack, speed test, 12 locks & HTML dashboard.",
-    { path, url: z.string().optional().describe("Local app URL (auto-detected if omitted)"), token: z.string().optional() },
-    wrap(({ path, url, token }) => audit(path, { url, token })));
+    { path, url: z.string().optional().describe("Local app URL or port (e.g. 5000, 3000; auto-detected if omitted)"), port: z.union([z.string(), z.number()]).optional().describe("Local app port (e.g. 5000)"), token: z.string().optional() },
+    wrap(({ path, url, port, token }) => audit(path, { url: port ? `http://localhost:${port}` : url, token })));
   server.tool("check_code", "Read all project code (HTML, CSS, JS/TS, SQL, PHP, Go) and find leaked secrets, security weaknesses and speed problems. Offline.", { path }, wrap(({ path }) => check(path)));
   server.tool("start_attack", "Safely attack the app running on localhost: open routes, CORS, cookies, rate limits, XSS/SQL error probes, error leaks, API speed. Refuses non-local URLs.",
     { url: z.string().describe("Local app URL, e.g. http://localhost:3000"), path, token: z.string().optional().describe("Optional demo-user token"), samples: z.number().optional().describe("Requests per route for the speed test (default 20)") },
