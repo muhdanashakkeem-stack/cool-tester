@@ -1,7 +1,7 @@
 #!/usr/bin/env node
 import { Command } from "commander";
 import chalk from "chalk";
-import { check, runAttack, report, fixPrompt, verify, locks, fixEnv, audit } from "../src/api.js";
+import { check, runAttack, report, fixPrompt, verify, locks, fixEnv, audit, serveDashboard } from "../src/api.js";
 import { meetsThreshold } from "../src/scanner.js";
 import { printTerminal, printLocks } from "../src/report.js";
 import { buildFixPrompt } from "../src/fixPrompt.js";
@@ -57,6 +57,17 @@ program.command("fix [path]").description("Automatically create or update .gitig
       const res = fixEnv(p);
       console.log(chalk.green(`\n✔ ${res.message}\n`));
     } catch (e) { fail(e); }
+  });
+
+program.command("dashboard [path]").description("Launch the interactive HTML dashboard in your browser (default port 3333)")
+  .option("--port <port>", "port to serve dashboard on", "3333")
+  .option("--no-open", "do not automatically open the browser")
+  .action((p, o) => {
+    try {
+      serveDashboard(p, Number(o.port), o.open);
+    } catch (e) {
+      fail(e);
+    }
   });
 
 program.command("mcp").description("Start the MCP server (for Cursor, Claude Code, etc.)")

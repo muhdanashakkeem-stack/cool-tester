@@ -6,11 +6,13 @@ import { buildFixPrompt } from "./fixPrompt.js";
 import { evaluateLocks } from "./locks.js";
 import { fixEnv as doFixEnv } from "./envChecks.js";
 import { runAudit as doRunAudit } from "./audit.js";
+import { serveDashboard as doServeDashboard } from "./serveDashboard.js";
 
 const R = (p) => path.resolve(p || process.cwd());
 
 export const fixEnv = (p) => doFixEnv(R(p));
 export const audit = (p, o) => doRunAudit(R(p), o);
+export const serveDashboard = (p, port, open) => doServeDashboard(R(p), port, open);
 
 export function check(p) {
   const root = R(p);

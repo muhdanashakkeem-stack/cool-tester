@@ -38,6 +38,7 @@ npm run audit
 | `cool-tester attack <url>` | Safely probe local app on `localhost` (Auth, CORS, Rate Limit, XSS, SQLi, Speed) |
 | `cool-tester report [path]` | Show latest combined report (`--fix-prompt` for AI prompt, `--json` for raw output) |
 | `cool-tester verify [path]` | Re-run only previously failed checks to confirm all doors are locked |
+| `cool-tester dashboard [path]` | Launch interactive HTML dashboard in browser (default port 3333) |
 | `cool-tester mcp` | Start Model Context Protocol server for AI coding agents |
 
 ---
